@@ -34,6 +34,11 @@
 using namespace bb::cascades;
 
 
+/**
+ * Function to call for pThread.
+ * Sends window info to gl_main.
+ * More -> gl_main.c/.h
+ */
 void* glThread(void* arg)
 {
     ApplicationUI* inst = (ApplicationUI*)arg;
@@ -45,6 +50,7 @@ void* glThread(void* arg)
     qDebug() << "gl_main() error %d " << err;
     return NULL;
 }
+
 
 ApplicationUI::ApplicationUI():QObject()
 {
@@ -64,11 +70,13 @@ ApplicationUI::ApplicationUI():QObject()
     onSystemLanguageChanged();
 
     // create our foreign window
-    // Using .id() in the builder is equivalent to mViewfinderWindow->setWindowId()
     mGlWindow = ForeignWindowControl::create();
     mGlWindow->setWindowId(QString("glWindow"));
-        //.id(QString("glWindow"));
+
+    //create button
     mButton = Button::create("start");
+
+    //connect signals and slots
     QObject::connect(mButton,
                      SIGNAL(clicked()), this, SLOT(onButtonClicked()));
 
@@ -79,14 +87,16 @@ ApplicationUI::ApplicationUI():QObject()
                      SLOT(onWindowAttached(unsigned long,
                           const QString &,const QString &)));
 
+    //create our container
     Container* container = Container::create()
         .layout(AbsoluteLayout::create())
         .add(mGlWindow)
         .add(mButton);
 
-    //Application::setScene(Page::create().content(container));
     Page* mainPage = new Page();
     mainPage->setContent(container);
+
+    //set scene to page.
     Application::instance()->setScene(mainPage);
 }
 
@@ -99,10 +109,13 @@ void ApplicationUI::onWindowAttached(unsigned long handle,
     screen_window_t window = (screen_window_t)handle;
     // make window visible and position it behind cascades
     int i = 1;
+
+    //set screen to visible
     screen_set_window_property_iv(window, SCREEN_PROPERTY_VISIBLE, &i);
     i = -1;
+
+    //set depth to below cascades
     screen_set_window_property_iv(window, SCREEN_PROPERTY_ZORDER, &i);
-    // all good, right?
 }
 
 void ApplicationUI::onButtonClicked()

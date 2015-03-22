@@ -221,6 +221,7 @@ void render() {
     bbutil_swap();
 }
 
+//main entry point for GL stuff....
 int gl_main(
         const char* id,
         int id_len,
@@ -237,6 +238,8 @@ int gl_main(
     bps_initialize();
 
     //Use utility code to initialize EGL for rendering with GL ES 1.1
+    //This is a method I added.
+    //based off of bbutil_init_egl - Joel
     if (EXIT_SUCCESS != bbutil_init_egl_child(screen_cxt, id, id_len, groupArr, group_len)) {
         fprintf(stderr, "bbutil_init_egl failed\n");
         bbutil_terminate();
