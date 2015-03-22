@@ -288,8 +288,7 @@ int
 bbutil_init_egl_child(screen_context_t ctx,
         const char* id,
         int id_length,
-        const char* groupArr,
-        int group_length)
+        const char* groupArr)
 {
 
     int usage;
@@ -367,19 +366,22 @@ bbutil_init_egl_child(screen_context_t ctx,
                                  id_length,
                                  id);
 
-    rc = screen_create_window_type(&screen_win, screen_ctx, SCREEN_CHILD_WINDOW);
+    //rc = screen_create_window_type(&screen_win, screen_ctx, SCREEN_CHILD_WINDOW);
+    /*
     if (rc) {
         perror("screen_create_window");
         bbutil_terminate();
         return EXIT_FAILURE;
-    }
+    }*/
 
-    rc = screen_create_window_group(screen_win, get_window_group_id());
+    //rc = screen_create_window_group(screen_win, get_window_group_id());
+    /*
     if (rc) {
         perror("screen_create_window_group");
         bbutil_terminate();
         return EXIT_FAILURE;
     }
+    */
 
     rc = screen_set_window_property_iv(screen_win, SCREEN_PROPERTY_FORMAT, &format);
     if (rc) {

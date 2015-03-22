@@ -4,39 +4,27 @@ BASEDIR = $$quote($$_PRO_FILE_PWD_)
 device {
     CONFIG(debug, debug|release) {
         profile {
-            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
-            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
             LIBS += -lscreen \
+                -lpng16 \
                 -lEGL \
-                -lpng \
-                -lfont \
-                -limg \
-                -lGLESv1_CM \
-                -lm \
-                -lbbplatform
+                -lGLESv1_CM
 
             CONFIG += \
                 config_pri_assets \
                 config_pri_source_group1
         } else {
-            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
-            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
             LIBS += -lscreen \
+                -lpng16 \
                 -lEGL \
-                -lpng \
-                -lfont \
-                -limg \
-                -lGLESv1_CM \
-                -lm \
-                -lbbplatform
+                -lGLESv1_CM
 
             CONFIG += \
                 config_pri_assets \
@@ -47,20 +35,14 @@ device {
 
     CONFIG(release, debug|release) {
         !profile {
-            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
-            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
             LIBS += -lscreen \
+                -lpng16 \
                 -lEGL \
-                -lpng \
-                -lfont \
-                -limg \
-                -lGLESv1_CM \
-                -lm \
-                -lbbplatform
+                -lGLESv1_CM
 
             CONFIG += \
                 config_pri_assets \
@@ -72,20 +54,14 @@ device {
 simulator {
     CONFIG(debug, debug|release) {
         !profile {
-            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            INCLUDEPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
-            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/img) \
-                $$quote(${QNX_TARGET}/usr/include/bb/platform)
+            DEPENDPATH += $$quote(${QNX_TARGET}/usr/include/libpng16)
 
             LIBS += -lscreen \
+                -lpng16 \
                 -lEGL \
-                -lpng \
-                -lfont \
-                -limg \
-                -lGLESv1_CM \
-                -lm \
-                -lbbplatform
+                -lGLESv1_CM
 
             CONFIG += \
                 config_pri_assets \
@@ -95,7 +71,10 @@ simulator {
 }
 
 config_pri_assets {
-    OTHER_FILES += $$quote($$BASEDIR/assets/main.qml)
+    OTHER_FILES += \
+        $$quote($$BASEDIR/assets/ItemPage.qml) \
+        $$quote($$BASEDIR/assets/data.xml) \
+        $$quote($$BASEDIR/assets/main.qml)
 }
 
 config_pri_source_group1 {

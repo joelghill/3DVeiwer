@@ -38,8 +38,7 @@ void render(void);
 int gl_main(
         const char* id,
         int id_length,
-        const char* groupArr,
-        int group_len
+        const char* groupArr
         );
 
 #ifdef __cplusplus

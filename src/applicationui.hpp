@@ -21,6 +21,7 @@
 #include <bb/cascades/ForeignWindowControl>
 #include <bb/cascades/Container>
 #include <bb/cascades/Button>
+
 #include "pthread.h"
 
 namespace bb
@@ -43,26 +44,25 @@ class ApplicationUI : public QObject
     Q_OBJECT
 public:
 
+    bb::cascades::ForeignWindowControl *mGlWindow;
+
     ApplicationUI();
     virtual ~ApplicationUI() {}
-
-    bb::cascades::ForeignWindowControl *mGlWindow;
 
 private slots:
 
     void onSystemLanguageChanged();
+    void onWindowAttached(screen_window_t handle,
+                                   const QString &group,
+                                   const QString &id);
+    void onButtonClicked();
 private:
 
-    void onWindowAttached(unsigned long handle,
-                               const QString &group,
-                               const QString &id);
-    void onButtonClicked();
-    //void glThread(void* arg);
-    QTranslator* m_pTranslator;
 
-    pthread_t* mTid;
+    QTranslator* m_pTranslator;
     bb::cascades::LocaleHandler* m_pLocaleHandler;
     bb::cascades::Button *mButton;
+    pthread_t mTid;
 };
 
 #endif /* ApplicationUI_HPP_ */

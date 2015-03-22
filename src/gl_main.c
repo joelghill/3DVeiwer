@@ -202,6 +202,8 @@ initializegl() {
 
 void render() {
     //Typical render pass
+    //fprintf(stdout, "RENDERING.....\n");
+    //fflush(stdout);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -225,12 +227,14 @@ void render() {
 int gl_main(
         const char* id,
         int id_len,
-        const char* groupArr,
-        int group_len) {
+        const char* groupArr) {
+    //fprintf(stdout, "starting gl_main...\n");
 
     int exit_application = 0;
     static screen_context_t screen_cxt;
 
+    //fprintf(stdout, "starting gl_main...\n");
+    //fflush(stdout);
     //Create a screen context that will be used to create an EGL surface to to receive libscreen events
     screen_create_context(&screen_cxt, 0);
 
@@ -240,7 +244,7 @@ int gl_main(
     //Use utility code to initialize EGL for rendering with GL ES 1.1
     //This is a method I added.
     //based off of bbutil_init_egl - Joel
-    if (EXIT_SUCCESS != bbutil_init_egl_child(screen_cxt, id, id_len, groupArr, group_len)) {
+    if (EXIT_SUCCESS != bbutil_init_egl_child(screen_cxt, id, id_len, groupArr)) {
         fprintf(stderr, "bbutil_init_egl failed\n");
         bbutil_terminate();
         screen_destroy_context(screen_cxt);

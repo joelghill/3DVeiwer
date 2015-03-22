@@ -43,8 +43,7 @@ int bbutil_init_egl(screen_context_t ctx);
 int bbutil_init_egl_child(screen_context_t ctx,
         const char* id,
         int id_len,
-        const char* groupArr,
-        int group_len);
+        const char* groupArr);
 
 /**
  * Terminates EGL

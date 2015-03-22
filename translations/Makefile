@@ -1,4 +1,4 @@
-QMAKE_TARGET  = ThreeDViewer
+QMAKE_TARGET  = CascadesProject
 LUPDATE       = $(QNX_HOST)/usr/bin/lupdate
 LRELEASE      = $(QNX_HOST)/usr/bin/lrelease
 

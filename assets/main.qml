@@ -14,14 +14,38 @@
  * limitations under the License.
  */
 
-import bb.cascades 1.4
+import bb.cascades 1.3
+NavigationPane {
+    id: nav
+    Page {
+        Container {
+            ListView {
+                dataModel: XmlDataModel {
+                    source: "data.xml"
+                }
+                onTriggered: {
 
-Page {
-    Container {
-        Label {
-            // Localized text with the dynamic translation and locale updates support
-            text: qsTr("Hello World") + Retranslate.onLocaleOrLanguageChanged
-            textStyle.base: SystemDefaults.TextStyles.BigText
+                    if (indexPath.length > 1) {
+                        var chosenItem = dataModel.data(indexPath);
+                        var contentpage = itemPageDefinition.createObject();
+
+                        contentpage.itemPageTitle = chosenItem.name
+                        nav.push(contentpage);
+                    }
+                }
+                accessibility.name: "Listing"
+            }
+
         }
+
+    }
+    attachedObjects: [
+        ComponentDefinition {
+            id: itemPageDefinition
+            source: "ItemPage.qml"
+        }
+    ]
+    onPopTransitionEnded: {
+        page.destroy();
     }
 }

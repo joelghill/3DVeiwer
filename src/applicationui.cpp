@@ -27,34 +27,43 @@
 #include <bb/cascades/Button>
 #include <bb/cascades/Page>
 
+#include "pthread.h"
 #include "gl_main.h"
 
-#include <pthread.h>
-
 using namespace bb::cascades;
-
 
 /**
  * Function to call for pThread.
  * Sends window info to gl_main.
  * More -> gl_main.c/.h
  */
+void test(){
+    qDebug()<< "test function called from thread";
+}
 void* glThread(void* arg)
 {
-    ApplicationUI* inst = (ApplicationUI*)arg;
+    ForeignWindowControl* inst = (ForeignWindowControl*)arg;
     qDebug() << "starting main";
-    int err = gl_main(inst->mGlWindow->windowId().toStdString().c_str(),
-            inst->mGlWindow->windowId().toStdString().length(),
-            inst->mGlWindow->windowGroup().toStdString().c_str(),
-            inst->mGlWindow->windowGroup().toStdString().length());
-    qDebug() << "gl_main() error %d " << err;
-    return NULL;
+    qDebug() << "Window ID passed to thread:  " << inst->windowId().toStdString().c_str();
+    qDebug() << "Length():  " << inst->windowId().toStdString().length();
+    qDebug() << "window group ID:  " << inst->windowGroup().toStdString().c_str();
+    //qDebug() << "window group ID length:  " << inst->windowGroup().toStdString().length();
+    //while(true){
+
+    int err = gl_main(inst->windowId().toStdString().c_str(),
+            inst->windowId().toStdString().length(),
+            inst->windowGroup().toStdString().c_str());
+    //}
+
+    //test();
+    //usleep(10000);
+    qDebug() << "gl_main() concluded!" ;
+    pthread_exit((void*)0);
 }
 
-
-ApplicationUI::ApplicationUI():QObject()
+ApplicationUI::ApplicationUI() :
+        QObject()
 {
-    qDebug() << "Hello OpenGL!";
     // prepare the localization
     m_pTranslator = new QTranslator(this);
     m_pLocaleHandler = new LocaleHandler(this);
@@ -81,10 +90,10 @@ ApplicationUI::ApplicationUI():QObject()
                      SIGNAL(clicked()), this, SLOT(onButtonClicked()));
 
     QObject::connect(mGlWindow,
-                     SIGNAL(windowAttached(unsigned long,
+                     SIGNAL(windowAttached(screen_window_t,
                                            const QString &, const QString &)),
                      this,
-                     SLOT(onWindowAttached(unsigned long,
+                     SLOT(onWindowAttached(screen_window_t,
                           const QString &,const QString &)));
 
     //create our container
@@ -101,7 +110,7 @@ ApplicationUI::ApplicationUI():QObject()
 }
 
 
-void ApplicationUI::onWindowAttached(unsigned long handle,
+void ApplicationUI::onWindowAttached(screen_window_t handle,
                            const QString &group,
                            const QString &id)
 {
@@ -124,7 +133,12 @@ void ApplicationUI::onButtonClicked()
     // only let the button be clicked once
     mButton->setEnabled(false);
     // spawn a thread to do the opengl stuff
-    pthread_create(mTid, NULL, &glThread, NULL);
+    pthread_attr_t attr;
+    pthread_attr_init( &attr );
+    pthread_attr_setdetachstate(
+       &attr, PTHREAD_CREATE_DETACHED );
+    pthread_create(&mTid, &attr, &glThread, (void *)mGlWindow);
+
 }
 
 void ApplicationUI::onSystemLanguageChanged()
@@ -132,7 +146,7 @@ void ApplicationUI::onSystemLanguageChanged()
     QCoreApplication::instance()->removeTranslator(m_pTranslator);
     // Initiate, load and install the application translation files.
     QString locale_string = QLocale().name();
-    QString file_name = QString("IRC_Client_%1").arg(locale_string);
+    QString file_name = QString("CascadesProject_%1").arg(locale_string);
     if (m_pTranslator->load(file_name, "app/native/qm")) {
         QCoreApplication::instance()->installTranslator(m_pTranslator);
     }
